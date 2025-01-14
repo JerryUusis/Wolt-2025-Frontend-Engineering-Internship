@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -5,8 +7,11 @@ import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
+import NumberInput from "./components/NumberInput";
 
 function App() {
+  const [cartValue, setCartValue] = useState(0);
+
   return (
     <Box
       sx={{
@@ -30,7 +35,13 @@ function App() {
       >
         <Typography variant="h1">Delivery Order Price Calculator</Typography>
         <TextField label="Venue slug" />
-        <TextField label="Cart value" />
+        <NumberInput
+          label="Cart value"
+          dataTestId={"cartValue"}
+          setNumberState={setCartValue}
+          isFloatValue={true}
+          value={cartValue}
+        />
         <TextField label="User latitude" />
         <TextField label="User longitude" />
         <Button>Get location</Button>
