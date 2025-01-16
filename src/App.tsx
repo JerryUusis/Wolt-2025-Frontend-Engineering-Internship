@@ -8,8 +8,10 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import NumberInput from "./components/NumberInput";
+import StringInput from "./components/StringInput";
 
 function App() {
+  const [venueSlug, setVenueSlug] = useState("");
   const [cartValue, setCartValue] = useState(0);
 
   return (
@@ -34,7 +36,12 @@ function App() {
         }}
       >
         <Typography variant="h1">Delivery Order Price Calculator</Typography>
-        <TextField label="Venue slug" />
+        <StringInput
+          label="Venue slug"
+          dataTestId="venueSlug"
+          setStringState={setVenueSlug}
+          value={venueSlug}
+        />
         <NumberInput
           label="Cart value"
           dataTestId={"cartValue"}
