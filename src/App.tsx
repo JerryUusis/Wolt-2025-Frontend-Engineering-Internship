@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -8,13 +8,66 @@ import Divider from "@mui/material/Divider";
 import NumberInput from "./components/NumberInput";
 import StringInput from "./components/StringInput";
 
-import { getUserLocation } from "./utils/library";
+import { getUserLocation, haversineDistance } from "./utils/library";
 
 function App() {
   const [venueSlug, setVenueSlug] = useState("");
   const [cartValue, setCartValue] = useState(0);
   const [userLatitude, setUserLatitude] = useState(0);
   const [userLongitude, setUserLongitude] = useState(0);
+  const [staticVenueData, setStaticVenueData] = useState();
+  const [dynamicVenueData, setDynamicVenueData] = useState();
+
+  useEffect(() => {
+    const fetchVenueData = async (
+      venueSlug: string,
+      endpointType: "static" | "dynamic",
+      setState: React.Dispatch<SetStateAction>
+    ) => {
+      const url = `https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/${venueSlug}`;
+      const response = await fetch(`${url}/${endpointType}`);
+      const data = await response.json();
+      setState(data);
+    };
+
+    const fetchDynamicAndStaticVenueData = async () => {
+      await fetchVenueData(
+        "home-assignment-venue-helsinki",
+        "static",
+        setStaticVenueData
+      );
+      await fetchVenueData(
+        "home-assignment-venue-helsinki",
+        "dynamic",
+        setDynamicVenueData
+      );
+    };
+
+    fetchDynamicAndStaticVenueData();
+  }, []);
+
+  const calculateTotal = () => {
+    // Venue location data
+    const [venueLongitude, venueLatitude] =
+      staticVenueData.venue_raw.location.coordinates;
+
+    // Calculate straight line distance between user and venue
+    const distance = haversineDistance(
+      userLatitude,
+      venueLatitude,
+      userLongitude,
+      venueLongitude
+    );
+
+    const total = {
+      cartValue,
+      smallOrderSurcharge: 0,
+      deliveryDistance: distance,
+      deiveryFee: 190,
+      totalPrice: 1190,
+    };
+    return total;
+  };
 
   return (
     <Box
@@ -72,7 +125,7 @@ function App() {
         >
           Get location
         </Button>
-        <Button>Calculate delivery fee</Button>
+        <Button onClick={() => calculateTotal()}>Calculate delivery fee</Button>
         <Box sx={{ width: "100%" }}>
           <Typography variant="h2">Price Breakdown</Typography>
           <List>
