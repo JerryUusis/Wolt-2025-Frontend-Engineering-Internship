@@ -1,7 +1,5 @@
 import { useState } from "react";
-
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
@@ -10,9 +8,13 @@ import Divider from "@mui/material/Divider";
 import NumberInput from "./components/NumberInput";
 import StringInput from "./components/StringInput";
 
+import { getUserLocation } from "./utils/library";
+
 function App() {
   const [venueSlug, setVenueSlug] = useState("");
   const [cartValue, setCartValue] = useState(0);
+  const [userLatitude, setUserLatitude] = useState(0);
+  const [userLongitude, setUserLongitude] = useState(0);
 
   return (
     <Box
@@ -49,9 +51,27 @@ function App() {
           isFloatValue={true}
           value={cartValue}
         />
-        <TextField label="User latitude" />
-        <TextField label="User longitude" />
-        <Button>Get location</Button>
+        <NumberInput
+          label="User latitude"
+          dataTestId={"userLatitude"}
+          setNumberState={setUserLatitude}
+          isFloatValue={true}
+          value={userLatitude}
+          decimals={5}
+        />
+        <NumberInput
+          label="User longitude"
+          dataTestId={"userLongitude"}
+          setNumberState={setUserLongitude}
+          isFloatValue={true}
+          value={userLongitude}
+          decimals={5}
+        />
+        <Button
+          onClick={() => getUserLocation(setUserLatitude, setUserLongitude)}
+        >
+          Get location
+        </Button>
         <Button>Calculate delivery fee</Button>
         <Box sx={{ width: "100%" }}>
           <Typography variant="h2">Price Breakdown</Typography>
