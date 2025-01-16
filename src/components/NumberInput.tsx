@@ -6,22 +6,19 @@ interface NumberInputProps {
   label: string;
   setNumberState: Dispatch<React.SetStateAction<number>>;
   isFloatValue: boolean;
+  decimals?: number;
   value: number;
 }
 
-// https://mui.com/material-ui/migration/migrating-from-deprecated-apis/#textfield
+// https://mui.com/material-ui/api/text-field/
 const NumberInput = ({
   dataTestId,
   label,
   setNumberState,
   isFloatValue,
+  decimals = 2,
   value,
 }: NumberInputProps) => {
-  const numberTypeProps = {
-    min: 0,
-    step: isFloatValue ? "0.01" : "1",
-  };
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let inputValueAsNumber: number;
     if (isFloatValue) {
@@ -34,7 +31,8 @@ const NumberInput = ({
 
   const handleFloatInput = (inputValue: string): number => {
     const inputValueString = inputValue.replace(",", ".");
-    const fixedFloatString = parseFloat(inputValueString).toFixed(2);
+
+    const fixedFloatString = parseFloat(inputValueString).toFixed(decimals);
     return Number(fixedFloatString);
   };
 
@@ -42,10 +40,29 @@ const NumberInput = ({
     return Number(inputValue);
   };
 
+  const handleDecimals = (isFloatValue: boolean) => {
+    if (isFloatValue) {
+      return parseStepsFromDecimals(decimals);
+    } else {
+      return "1";
+    }
+  };
+
+  // Set the correct amount of decimals
+  const parseStepsFromDecimals = (decimalsAmount: number): string => {
+    return (1 / Math.pow(10, decimalsAmount)).toString();
+  };
+
+  const numberTypeProps = {
+    min: 0,
+    step: handleDecimals(isFloatValue),
+  };
+
   return (
     <>
       <TextField
         label={label}
+        // https://mui.com/material-ui/migration/migrating-from-deprecated-apis/#textfield
         slotProps={{
           htmlInput: {
             ...numberTypeProps,
@@ -56,6 +73,7 @@ const NumberInput = ({
         type="number"
         onChange={handleChange}
         error={!isNaN(value) ? false : true}
+        value={value}
       />
     </>
   );
