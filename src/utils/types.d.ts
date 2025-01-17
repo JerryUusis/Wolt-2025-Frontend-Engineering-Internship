@@ -7,3 +7,13 @@ export interface DistanceRangeObject {
   // b is factored in to the delivery fee by adding b * distance / 10 (rounded to the nearest integer value).
   flag: null;
 }
+
+export interface OutputObject {
+  cartValueInCents: number;
+  smallOrderSurcharge;
+  deliveryDistance: number;
+  deliveryFee: number;
+  totalPrice: number;
+}
+
+export type FormatType = "euro" | "meter"

@@ -1,5 +1,5 @@
 import React, { SetStateAction } from "react";
-import { DistanceRangeObject } from "./types";
+import { DistanceRangeObject, OutputObject } from "./types";
 
 export const getUserLocation = (
   setUserLatitude: React.Dispatch<SetStateAction<number>>,
@@ -66,75 +66,71 @@ export const fetchVenueData = async (
   return await response.json();
 };
 
+export const getDistancePrice = (
+  straightLineDistance: number,
+  distanceRangesArray: DistanceRangeObject[],
+  basePrice: number
+): number => {
+  let distancePrice = 0;
+  for (const distanceRangeObject of distanceRangesArray) {
+    const { min, max, a, b } = distanceRangeObject;
+
+    if (
+      (straightLineDistance >= min && straightLineDistance < max) ||
+      (max === 0 && straightLineDistance < min)
+    ) {
+      distancePrice = basePrice + a + (b * straightLineDistance) / 10;
+    }
+  }
+  return distancePrice;
+};
+
 export const getTotal = async (
   venueSlug: string,
   cartValueInCents: number,
   userLatitude: number,
   userLongitude: number
-) => {
-  try {
-    const staticVenueData = await fetchVenueData(venueSlug, "static");
-    const dynamicVenueData = await fetchVenueData(venueSlug, "dynamic");
+): Promise<OutputObject> => {
+  const staticVenueData = await fetchVenueData(venueSlug, "static");
+  const dynamicVenueData = await fetchVenueData(venueSlug, "dynamic");
 
-    const [venueLongitude, venueLatitude] =
-      staticVenueData.venue_raw.location.coordinates;
+  const [venueLongitude, venueLatitude] =
+    staticVenueData.venue_raw.location.coordinates;
 
-    const distanceRanges =
-      dynamicVenueData.venue_raw.delivery_specs.delivery_pricing
-        .distance_ranges;
+  const distanceRanges =
+    dynamicVenueData.venue_raw.delivery_specs.delivery_pricing.distance_ranges;
 
-    // Calculate straight line distance between user and venue
-    const deliveryDistance = haversineDistance(
-      userLatitude,
-      venueLatitude,
-      userLongitude,
-      venueLongitude
-    );
+  // Calculate straight line distance between user and venue
+  const deliveryDistance = haversineDistance(
+    userLatitude,
+    venueLatitude,
+    userLongitude,
+    venueLongitude
+  );
 
-    const noSurchargeThreshold =
-      dynamicVenueData.venue_raw.delivery_specs.order_minimum_no_surcharge;
+  const noSurchargeThreshold =
+    dynamicVenueData.venue_raw.delivery_specs.order_minimum_no_surcharge;
 
-    const smallOrderSurcharge = getSurcharge(
-      cartValueInCents,
-      noSurchargeThreshold
-    );
+  const smallOrderSurcharge = getSurcharge(
+    cartValueInCents,
+    noSurchargeThreshold
+  );
 
-    const basePrice =
-      dynamicVenueData.venue_raw.delivery_specs.delivery_pricing.base_price;
+  const basePrice =
+    dynamicVenueData.venue_raw.delivery_specs.delivery_pricing.base_price;
 
-    const getDistancePrice = (
-      straightLineDistance: number,
-      distanceRangesArray: DistanceRangeObject[],
-      basePrice: number
-    ) => {
-      for (const distanceRangeObject of distanceRangesArray) {
-        const { min, max, a, b } = distanceRangeObject;
-        if (straightLineDistance > min && straightLineDistance < max) {
-          return basePrice + a + (b * straightLineDistance) / 10;
-        } else {
-          throw new Error("User too far from venue");
-        }
-      }
-    };
+  const deliveryFee = getDistancePrice(
+    deliveryDistance,
+    distanceRanges,
+    basePrice
+  );
 
-    const deliveryFee = getDistancePrice(
-      deliveryDistance,
-      distanceRanges,
-      basePrice
-    );
-
-    if (deliveryFee) {
-      const total = {
-        cartValueInCents,
-        smallOrderSurcharge,
-        deliveryDistance,
-        deliveryFee,
-        totalPrice: cartValueInCents + smallOrderSurcharge + deliveryFee,
-      };
-      console.log(total)
-      return total;
-    }
-  } catch (error) {
-    console.log(error);
-  }
+  const total = {
+    cartValueInCents,
+    smallOrderSurcharge,
+    deliveryDistance,
+    deliveryFee,
+    totalPrice: cartValueInCents + smallOrderSurcharge + deliveryFee,
+  };
+  return total;
 };
