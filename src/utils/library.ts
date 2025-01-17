@@ -39,3 +39,19 @@ export const haversineDistance = (
     );
   return Math.round(distance * 1000);
 };
+
+export const getSurcharge = (cartValueInCents: number, maxValue: number) => {
+  if (cartValueInCents >= maxValue) {
+    return 0;
+  } else {
+    return maxValue - cartValueInCents;
+  }
+};
+
+// Set the correct amount of decimals in the steps attribute
+// decimals = 1 => "0.1"
+// decimals = 2 => "0.01"
+// decimals = 3 => "0.001"
+export const parseStepsFromDecimals = (decimalsAmount: number): string => {
+  return (1 / Math.pow(10, decimalsAmount)).toString();
+};
