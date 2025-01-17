@@ -1,5 +1,5 @@
 import React, { SetStateAction } from "react";
-import { DistanceRangeObject, OutputObject } from "./types";
+import { DistanceRangeObject, FormatType, OutputObject } from "./types";
 
 export const getUserLocation = (
   setUserLatitude: React.Dispatch<SetStateAction<number>>,
@@ -133,4 +133,23 @@ export const getTotal = async (
     totalPrice: cartValueInCents + smallOrderSurcharge + deliveryFee,
   };
   return total;
+};
+
+// Format the raw data in SummaryListItem.tsx
+export const formatRawValue = (
+  rawValue: string | number,
+  formatType: FormatType
+) => {
+  if (typeof rawValue === "number" && formatType === "euro") {
+    return new Intl.NumberFormat("de-De", {
+      style: "currency",
+      currency: "EUR",
+    }).format(rawValue / 100);
+  } else if (typeof rawValue === "number" && formatType === "meter") {
+    return new Intl.NumberFormat("de-DE", {
+      style: "unit",
+      unit: "meter",
+      unitDisplay: "short",
+    }).format(rawValue);
+  }
 };
