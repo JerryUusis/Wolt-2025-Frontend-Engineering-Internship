@@ -1,20 +1,38 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { getTotal, getUserLocation } from "./utils/library";
+import { OutputObject } from "./utils/types";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import NumberInput from "./components/NumberInput";
+import FloatInput from "./components/FloatInput";
+import CoordinateInput from "./components/CoordinateInput";
 import StringInput from "./components/StringInput";
-
-import { getUserLocation } from "./utils/library";
+import Summary from "./components/Summary";
 
 function App() {
   const [venueSlug, setVenueSlug] = useState("");
-  const [cartValue, setCartValue] = useState(0);
+  const [cartValueInCents, setCartValueInCents] = useState(0);
   const [userLatitude, setUserLatitude] = useState(0);
   const [userLongitude, setUserLongitude] = useState(0);
+  const [total, setTotal] = useState<OutputObject>({
+    cartValueInCents: 0,
+    smallOrderSurcharge: 0,
+    deliveryDistance: 0,
+    deliveryFee: 0,
+    totalPrice: 0,
+  });
+
+  const handleCalculateTotal = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const result = await getTotal(
+      venueSlug,
+      cartValueInCents,
+      userLatitude,
+      userLongitude
+    );
+    setTotal(result);
+  };
 
   return (
     <Box
@@ -27,6 +45,7 @@ function App() {
         height: "100vh",
       }}
       component={"form"}
+      onSubmit={handleCalculateTotal}
     >
       <Box
         sx={{
@@ -44,50 +63,33 @@ function App() {
           setStringState={setVenueSlug}
           value={venueSlug}
         />
-        <NumberInput
-          label="Cart value"
+        <FloatInput
+          label="Cart value (€)"
           dataTestId={"cartValue"}
-          setNumberState={setCartValue}
-          isFloatValue={true}
-          value={cartValue}
+          setNumberState={setCartValueInCents}
+          value={cartValueInCents}
         />
-        <NumberInput
+        <CoordinateInput
           label="User latitude"
           dataTestId={"userLatitude"}
           setNumberState={setUserLatitude}
-          isFloatValue={true}
           value={userLatitude}
-          decimals={5}
         />
-        <NumberInput
+        <CoordinateInput
           label="User longitude"
           dataTestId={"userLongitude"}
           setNumberState={setUserLongitude}
-          isFloatValue={true}
           value={userLongitude}
-          decimals={5}
         />
         <Button
           onClick={() => getUserLocation(setUserLatitude, setUserLongitude)}
         >
           Get location
         </Button>
-        <Button>Calculate delivery fee</Button>
+        <Button type="submit">Calculate delivery fee</Button>
         <Box sx={{ width: "100%" }}>
           <Typography variant="h2">Price Breakdown</Typography>
-          <List>
-            <ListItem secondaryAction={<span>0e</span>}>Cart value</ListItem>
-            <ListItem secondaryAction={<span>0e</span>}>Delivery fee</ListItem>
-            <ListItem secondaryAction={<span>0e</span>}>
-              Delivery distance
-            </ListItem>
-            <ListItem secondaryAction={<span>0e</span>}>
-              Small order surcharge
-            </ListItem>
-            <ListItem secondaryAction={<span>0e</span>}>Cart value</ListItem>
-            <Divider />
-            <ListItem secondaryAction={<span>0e</span>}>Total price</ListItem>
-          </List>
+          <Summary {...total} />
         </Box>
       </Box>
     </Box>
