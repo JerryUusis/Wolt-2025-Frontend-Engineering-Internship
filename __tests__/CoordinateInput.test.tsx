@@ -87,6 +87,23 @@ describe("<CoordinateInput />", () => {
       // https://developer.mozilla.org/en-US/docs/Web/API/Element/className
       // https://mui.com/material-ui/api/input/#classes
       expect(parentDiv?.className).toMatch(/Mui-error/);
+      // expect(parentDiv?.classList.contains(".Mui-error")).toBe(true)
+    });
+    test("should have class '.Mui-error' if input's final character is a dot '.'", () => {
+      const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
+      userEvent.clear(inputField);
+
+      const newValue = "13.";
+
+      userEvent.type(inputField, newValue);
+
+      // Get the error class from the input field's parent <div> element
+      const parentDiv = inputField.parentElement;
+
+      // https://developer.mozilla.org/en-US/docs/Web/API/Element/className
+      // https://mui.com/material-ui/api/input/#classes
+      expect(parentDiv?.className).toMatch(/Mui-error/);
+      expect(inputField.value).toBe("");
     });
   });
 });
