@@ -78,7 +78,7 @@ describe("<CoordinateInput />", () => {
       expect(setMockState).toHaveBeenLastCalledWith(Number(newValue));
     });
     test("should have class '.Mui-error' if input is empty", () => {
-      const inputField = screen.getByTestId(dataTestId);
+      const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
       userEvent.clear(inputField);
 
       // Get the error class from the input field's parent <div> element
@@ -87,7 +87,7 @@ describe("<CoordinateInput />", () => {
       // https://developer.mozilla.org/en-US/docs/Web/API/Element/className
       // https://mui.com/material-ui/api/input/#classes
       expect(parentDiv?.className).toMatch(/Mui-error/);
-      // expect(parentDiv?.classList.contains(".Mui-error")).toBe(true)
+      expect(inputField.value).toBe("");
     });
     test("should have class '.Mui-error' if input's final character is a dot '.'", () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
