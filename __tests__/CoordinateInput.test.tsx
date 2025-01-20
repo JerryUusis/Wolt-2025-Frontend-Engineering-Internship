@@ -40,7 +40,24 @@ describe("<CoordinateInput />", () => {
       const inputLabel = await screen.findByLabelText(label);
       expect(inputLabel).toBeVisible();
     });
+    test("should have default attribute step=0.00001", () => {
+      const inputField = screen.getByTestId(dataTestId);
+      expect(inputField).toHaveAttribute("step", "0.00001");
+    });
+    test("should have attribute: data-test-id", () => {
+      const inputField = screen.getByTestId(dataTestId);
+      expect(inputField).toHaveAttribute("data-test-id", dataTestId);
+    });
+    test("should have attribute: inputmode=decimal", () => {
+      const inputField = screen.getByTestId(dataTestId);
+      expect(inputField).toHaveAttribute("inputmode", "decimal");
+    });
+    test("should have attribute: min=0", () => {
+      const inputField = screen.getByTestId(dataTestId);
+      expect(inputField).toHaveAttribute("min", "0");
+    });
   });
+
   describe("user interaction", () => {
     test("should call 'setState' with zero (0) when input is empty", () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
@@ -59,6 +76,17 @@ describe("<CoordinateInput />", () => {
 
       expect(inputField.value).toBe(newValue);
       expect(setMockState).toHaveBeenLastCalledWith(Number(newValue));
+    });
+    test("should have class '.Mui-error' if input is empty", () => {
+      const inputField = screen.getByTestId(dataTestId);
+      userEvent.clear(inputField);
+
+      // Get the error class from the input field's parent <div> element
+      const parentDiv = inputField.parentElement;
+
+      // https://developer.mozilla.org/en-US/docs/Web/API/Element/className
+      // https://mui.com/material-ui/api/input/#classes
+      expect(parentDiv?.className).toMatch(/Mui-error/);
     });
   });
 });
