@@ -42,6 +42,9 @@ export const haversineDistance = (
 };
 
 export const getSurcharge = (cartValueInCents: number, maxValue: number) => {
+  if (maxValue < 0 || cartValueInCents < 0) {
+    throw new Error("parameters can't have negative value");
+  }
   if (cartValueInCents >= maxValue) {
     return 0;
   } else {
