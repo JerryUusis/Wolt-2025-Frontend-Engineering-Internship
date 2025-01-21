@@ -57,6 +57,14 @@ export const getSurcharge = (cartValueInCents: number, maxValue: number) => {
 // decimals = 2 => "0.01"
 // decimals = 3 => "0.001"
 export const parseStepsFromDecimals = (decimalsAmount: number): string => {
+  if (decimalsAmount < 0) {
+    throw new Error("parameter can't be negative");
+  } else if (
+    !Number.isInteger(decimalsAmount) ||
+    Number.isNaN(decimalsAmount)
+  ) {
+    throw new Error("parameter must be an integer");
+  }
   return (1 / Math.pow(10, decimalsAmount)).toString();
 };
 
