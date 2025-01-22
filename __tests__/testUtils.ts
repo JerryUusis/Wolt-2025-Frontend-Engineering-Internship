@@ -17,3 +17,31 @@ export const testGetSurchargeWithTestValues = (
     });
   });
 };
+
+// https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition
+type SuccessCallback = (position: GeolocationPosition) => void;
+
+// Create a mock function for the geolocation wit custom location
+export const setGeolocationMocks = (latitude: number, longitude: number) => {
+  const mockGetCurrenPosition = vi.fn((successCallback: SuccessCallback) => {
+    successCallback({
+      coords: {
+        latitude: latitude,
+        longitude: longitude,
+        accuracy: 10,
+        altitude: null,
+        altitudeAccuracy: null,
+        heading: null,
+        speed: null,
+        toJSON: function () {
+          throw new Error("Function not implemented.");
+        },
+      },
+      timestamp: Date.now(),
+      toJSON: function () {
+        throw new Error("Function not implemented.");
+      },
+    });
+  });
+  return mockGetCurrenPosition;
+};
