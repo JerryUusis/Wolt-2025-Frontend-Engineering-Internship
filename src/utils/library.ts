@@ -3,12 +3,39 @@ import { DistanceRangeObject, FormatType, OutputObject } from "./types";
 
 export const getUserLocation = (
   setUserLatitude: React.Dispatch<SetStateAction<number>>,
-  setUserLongitude: React.Dispatch<SetStateAction<number>>
+  setUserLongitude: React.Dispatch<SetStateAction<number>>,
+  onError?: (error: GeolocationPositionError) => void
 ) => {
-  navigator.geolocation.getCurrentPosition((position) => {
-    setUserLatitude(parseFloat(position.coords.latitude.toFixed(5)));
-    setUserLongitude(parseFloat(position.coords.longitude.toFixed(5)));
-  });
+  // https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API/Using_the_Geolocation_API#javascript
+  // https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError
+  if (!navigator.geolocation) {
+    const geolocationNotSupportedError: GeolocationPositionError = {
+      code: 2,
+      message: "Geolocation is not supported by this browser",
+      PERMISSION_DENIED: 1,
+      POSITION_UNAVAILABLE: 2,
+      TIMEOUT: 3,
+    };
+    if (onError) {
+      onError(geolocationNotSupportedError);
+    }
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    // https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition
+    (position) => {
+      setUserLatitude(parseFloat(position.coords.latitude.toFixed(5)));
+      setUserLongitude(parseFloat(position.coords.longitude.toFixed(5)));
+    },
+    (error) => {
+      if (onError) {
+        onError(error);
+      } else {
+        console.error("Geolocation error:", error);
+      }
+    }
+  );
 };
 
 // https://mapsplatform.google.com/resources/blog/how-calculate-distances-map-maps-javascript-api/
