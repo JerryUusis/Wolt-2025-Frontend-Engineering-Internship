@@ -38,6 +38,20 @@ export const getUserLocation = (
   );
 };
 
+const validateCoordinate = (
+  name: "latitude" | "longitude",
+  value: number,
+  min: number,
+  max: number
+) => {
+  if (isNaN(value)) {
+    throw new Error(`${name} must be a valid number`);
+  }
+  if (value < min || value > max) {
+    throw new Error(`${name} must be between ${min} and ${max}`);
+  }
+};
+
 // https://mapsplatform.google.com/resources/blog/how-calculate-distances-map-maps-javascript-api/
 // Return straight line distance in meters
 export const haversineDistance = (
@@ -46,6 +60,15 @@ export const haversineDistance = (
   userLongitude: number,
   venueLongitude: number
 ) => {
+  validateCoordinate("latitude", userLatitude, -90, 90);
+  validateCoordinate("latitude", venueLatitude, -90, 90);
+  validateCoordinate("longitude", userLongitude, -180, 180);
+  validateCoordinate("longitude", venueLongitude, -180, 180);
+
+  // Validate coordinates (check "Value" articles)
+  // https://en.wikipedia.org/wiki/Latitude
+  // https://en.wikipedia.org/wiki/Longitude
+
   const radius = 6371.071; // Radius of the Earth in km
   const rlat1 = userLatitude * (Math.PI / 180); // Convert degrees to radians
   const rlat2 = venueLatitude * (Math.PI / 180);

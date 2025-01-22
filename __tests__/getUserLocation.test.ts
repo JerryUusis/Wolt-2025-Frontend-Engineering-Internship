@@ -1,5 +1,6 @@
 import { getUserLocation } from "../src/utils/library";
 import { setGeolocationMocks } from "./testUtils";
+import { testCoordinateValuesArray } from "./testUtils";
 
 describe("getUserLocation()", () => {
   const setMockLatitude = vi.fn();
@@ -17,15 +18,7 @@ describe("getUserLocation()", () => {
   });
 
   describe("successful callback", () => {
-    const testValues = [
-      { latitude: 60.17094, longitude: 24.93087 }, // Wolt HQ
-      { latitude: 60.26089, longitude: 24.85438 }, // The Happy Red Onion
-      { latitude: 60.277, longitude: 24.84475 }, // Mika Häkkisen aukio
-      { latitude: 60.18796, longitude: 24.96067 }, // Vaasanpuistikko
-      { latitude: 60.21664, longitude: 24.98362 }, // Vanhankaupunginkoski
-    ];
-
-    testValues.forEach(({ latitude, longitude }) => {
+    testCoordinateValuesArray.forEach(({ latitude, longitude }) => {
       test(`latitude: ${latitude}, longitude: ${longitude}`, () => {
         // Inject Mock in global object so it's accesible in Node environment
         // https://v1.vitest.dev/api/vi#vi-stubglobal

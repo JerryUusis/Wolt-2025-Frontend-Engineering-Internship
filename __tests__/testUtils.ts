@@ -6,7 +6,7 @@ export interface SurchargeTestObject {
   returnValue?: number;
 }
 
-// Insert test values in an array and test them with 
+// Insert test values in an array and test them with
 export const testGetSurchargeWithTestValues = (
   testValuesArray: SurchargeTestObject[]
 ) => {
@@ -45,3 +45,11 @@ export const setGeolocationMocks = (latitude: number, longitude: number) => {
   });
   return mockGetCurrenPosition;
 };
+
+export const testCoordinateValuesArray = [
+  { latitude: 60.17094, longitude: 24.93087 }, // Wolt HQ
+  { latitude: 60.18796, longitude: 24.96067 }, // Vaasanpuistikko
+  { latitude: 60.26089, longitude: 24.85438 }, // The Happy Red Onion
+  { latitude: 60.277, longitude: 24.84475 }, // Mika Häkkisen aukio
+  { latitude: 60.21664, longitude: 24.98362 }, // Vanhankaupunginkoski
+];
