@@ -42,14 +42,9 @@ describe("fetchVenueData", () => {
   describe("failed api call", () => {
     testCases.forEach((dataType) => {
       test(`should throw error on rejection with datatype='${dataType}'`, async () => {
-        const mockError = new Error("test error");
-        // https://v1.vitest.dev/api/mock.html#mockrejectedvalueonce
-        // Mock rejected promise
-        mockFetch.mockRejectedValueOnce(mockError);
-
         expect(async () => {
           await fetchVenueData(testSlug, dataType);
-        }).rejects.toThrowError(mockError);
+        }).rejects.toThrowError(`Failed to fetch ${dataType} venue data`);
 
         expect(mockFetch).toHaveBeenCalledWith(
           `${url}/${testSlug}/${dataType}`

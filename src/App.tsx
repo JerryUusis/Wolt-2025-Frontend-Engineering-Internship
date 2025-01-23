@@ -11,12 +11,12 @@ import StringInput from "./components/StringInput";
 import Summary from "./components/Summary";
 
 function App() {
-  const [venueSlug, setVenueSlug] = useState("");
-  const [cartValueInCents, setCartValueInCents] = useState(0);
+  const [venueSlug, setVenueSlug] = useState("home-assignment-venue-helsinki");
+  const [cartValue, setCartValue] = useState(0); // Cart value in cents
   const [userLatitude, setUserLatitude] = useState(0);
   const [userLongitude, setUserLongitude] = useState(0);
   const [total, setTotal] = useState<OutputObject>({
-    cartValueInCents: 0,
+    cartValue: 0,
     smallOrderSurcharge: 0,
     deliveryDistance: 0,
     deliveryFee: 0,
@@ -25,12 +25,12 @@ function App() {
 
   const handleCalculateTotal = async (event: React.FormEvent) => {
     event.preventDefault();
-    const result = await getTotal(
+    const result = (await getTotal({
       venueSlug,
-      cartValueInCents,
+      cartValue,
       userLatitude,
-      userLongitude
-    );
+      userLongitude,
+    })) as OutputObject;
     setTotal(result);
   };
 
@@ -66,8 +66,8 @@ function App() {
         <FloatInput
           label="Cart value (€)"
           dataTestId={"cartValue"}
-          setNumberState={setCartValueInCents}
-          value={cartValueInCents}
+          setNumberState={setCartValue}
+          value={cartValue}
         />
         <CoordinateInput
           label="User latitude"
