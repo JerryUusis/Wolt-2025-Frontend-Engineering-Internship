@@ -1,10 +1,10 @@
 import { cleanup, screen } from "@testing-library/react";
 import SummaryListItem, {
   SummaryListItemProps,
-} from "../src/components/SummaryListItem";
-import { formatRawValue } from "../src/utils/library";
+} from "../../src/components/SummaryListItem";
+import { formatRawValue } from "../../src/utils/library";
 import { renderWithTheme } from "./renderTestLibrary";
-import { theme } from "../src/utils/theme";
+import { theme } from "../../src/utils/theme";
 
 describe("<SummaryListItem.tsx />", () => {
   describe("formatting meters", () => {

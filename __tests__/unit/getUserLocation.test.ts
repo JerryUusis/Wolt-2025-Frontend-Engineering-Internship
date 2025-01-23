@@ -1,4 +1,4 @@
-import { getUserLocation } from "../src/utils/library";
+import { getUserLocation } from "../../src/utils/library";
 import { setGeolocationMocks } from "./testUtils";
 import { testCoordinateValuesArray } from "./testUtils";
 

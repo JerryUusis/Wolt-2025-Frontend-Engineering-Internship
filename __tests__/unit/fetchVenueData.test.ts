@@ -1,4 +1,4 @@
-import { fetchVenueData } from "../src/utils/library";
+import { fetchVenueData } from "../../src/utils/library";
 
 const mockFetch = vi.fn();
 

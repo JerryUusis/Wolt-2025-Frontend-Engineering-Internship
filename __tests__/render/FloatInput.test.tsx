@@ -1,23 +1,23 @@
 import { cleanup, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import CoordinateInput from "../src/components/CoordinateInput";
+import FloatInput from "../../src/components/FloatInput";
 import { setCustomQuery, renderWithTheme } from "./renderTestLibrary";
-import { theme } from "../src/utils/theme";
+import { theme } from "../../src/utils/theme";
 
-describe("<CoordinateInput />", () => {
+describe("<FloatInput />", () => {
   setCustomQuery("data-test-id");
   const setMockState = vi.fn();
 
   const testDataValues = {
-    dataTestId: "test-coordinates",
+    dataTestId: "test-float-input",
     label: "test label",
-    value: 20.12345,
+    value: 10.5,
   };
   const { dataTestId, label, value } = testDataValues;
 
   beforeEach(() => {
     renderWithTheme(
-      <CoordinateInput {...testDataValues} setNumberState={setMockState} />,
+      <FloatInput {...testDataValues} setNumberState={setMockState} />,
       theme
     );
   });
@@ -40,9 +40,9 @@ describe("<CoordinateInput />", () => {
       const inputLabel = await screen.findByLabelText(label);
       expect(inputLabel).toBeVisible();
     });
-    test("should have default attribute step=0.00001", () => {
+    test("should have default attribute step=0.01", () => {
       const inputField = screen.getByTestId(dataTestId);
-      expect(inputField).toHaveAttribute("step", "0.00001");
+      expect(inputField).toHaveAttribute("step", "0.01");
     });
     test("should have attribute: data-test-id", () => {
       const inputField = screen.getByTestId(dataTestId);
@@ -71,11 +71,13 @@ describe("<CoordinateInput />", () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
       userEvent.clear(inputField);
 
-      const newValue = "20.54321";
+      const newValue = "13.50";
       await userEvent.type(inputField, newValue);
 
-      expect(inputField.value).toBe(newValue);
-      expect(setMockState).toHaveBeenLastCalledWith(Number(newValue));
+      expect(Number(inputField.value)).toBe(Number(newValue));
+      // Default value for decimals is 2
+      // Use Number(inputValue) * Math.pow(10, decimals) to parse the value to integer (cents in this case)
+      expect(setMockState).toHaveBeenLastCalledWith(Number(newValue) * 100);
     });
     test("should have class '.Mui-error' if input is empty", () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);

@@ -1,7 +1,7 @@
-import { getTotal } from "../src/utils/library";
+import { getTotal } from "../../src/utils/library";
 import staticData from "./staticVenueData.json";
 import dynamicData from "./dynamicVenueData.json";
-import { OutputObject, TotalInputObject } from "../src/utils/types";
+import { OutputObject, TotalInputObject } from "../../src/utils/types";
 
 const mockFetch = vi.fn();
 

@@ -1,23 +1,23 @@
 import { cleanup, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import FloatInput from "../src/components/FloatInput";
+import StringInput from "../../src/components/StringInput";
 import { setCustomQuery, renderWithTheme } from "./renderTestLibrary";
-import { theme } from "../src/utils/theme";
+import { theme } from "../../src/utils/theme";
 
-describe("<FloatInput />", () => {
+describe("<StringInput />", () => {
   setCustomQuery("data-test-id");
   const setMockState = vi.fn();
 
   const testDataValues = {
-    dataTestId: "test-float-input",
+    dataTestId: "test-string-input",
     label: "test label",
-    value: 10.5,
+    value: "home-assignment-venue-helsinki",
   };
   const { dataTestId, label, value } = testDataValues;
 
   beforeEach(() => {
     renderWithTheme(
-      <FloatInput {...testDataValues} setNumberState={setMockState} />,
+      <StringInput {...testDataValues} setStringState={setMockState} />,
       theme
     );
   });
@@ -40,44 +40,46 @@ describe("<FloatInput />", () => {
       const inputLabel = await screen.findByLabelText(label);
       expect(inputLabel).toBeVisible();
     });
-    test("should have default attribute step=0.01", () => {
-      const inputField = screen.getByTestId(dataTestId);
-      expect(inputField).toHaveAttribute("step", "0.01");
-    });
     test("should have attribute: data-test-id", () => {
       const inputField = screen.getByTestId(dataTestId);
       expect(inputField).toHaveAttribute("data-test-id", dataTestId);
     });
-    test("should have attribute: inputmode=decimal", () => {
+    test("should have attribute: inputmode=text", () => {
       const inputField = screen.getByTestId(dataTestId);
-      expect(inputField).toHaveAttribute("inputmode", "decimal");
-    });
-    test("should have attribute: min=0", () => {
-      const inputField = screen.getByTestId(dataTestId);
-      expect(inputField).toHaveAttribute("min", "0");
+      expect(inputField).toHaveAttribute("inputmode", "text");
     });
   });
 
   describe("user interaction", () => {
-    test("should call 'setState' with zero (0) when input is empty", () => {
+    test("should call 'setState' with empty string when input is empty", async () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
-      userEvent.clear(inputField);
+      await userEvent.clear(inputField);
+
+      console.log(inputField.value);
 
       expect(inputField.value).toBe("");
       expect(setMockState).toHaveBeenCalledOnce();
-      expect(setMockState).toHaveBeenCalledWith(0);
+      expect(setMockState).toHaveBeenCalledWith("");
     });
     test("should set 'setState' to user's desired value", async () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
       userEvent.clear(inputField);
 
-      const newValue = "13.50";
+      const newValue = "new-test-slug";
       await userEvent.type(inputField, newValue);
 
-      expect(Number(inputField.value)).toBe(Number(newValue));
-      // Default value for decimals is 2
-      // Use Number(inputValue) * Math.pow(10, decimals) to parse the value to integer (cents in this case)
-      expect(setMockState).toHaveBeenLastCalledWith(Number(newValue) * 100);
+      expect(inputField.value).toBe(newValue);
+      expect(setMockState).toHaveBeenLastCalledWith(newValue);
+    });
+    test("should trim empty spaces from the start and end of entered value", async () => {
+      const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
+      userEvent.clear(inputField);
+
+      const newValue = "  new-test-slug  ";
+      await userEvent.type(inputField, newValue);
+
+      expect(inputField.value).toBe(newValue.trim());
+      expect(setMockState).toHaveBeenLastCalledWith(newValue.trim());
     });
     test("should have class '.Mui-error' if input is empty", () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
@@ -88,22 +90,7 @@ describe("<FloatInput />", () => {
 
       // https://developer.mozilla.org/en-US/docs/Web/API/Element/className
       // https://mui.com/material-ui/api/input/#classes
-      expect(parentDiv?.className).toMatch(/Mui-error/);
-      expect(inputField.value).toBe("");
-    });
-    test("should have class '.Mui-error' if input's final character is a dot '.'", () => {
-      const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
-      userEvent.clear(inputField);
-
-      const newValue = "13.";
-
-      userEvent.type(inputField, newValue);
-
-      // Get the error class from the input field's parent <div> element
-      const parentDiv = inputField.parentElement;
-
-      // https://developer.mozilla.org/en-US/docs/Web/API/Element/className
-      // https://mui.com/material-ui/api/input/#classes
+      // https://vitest.dev/api/expect.html#tomatch
       expect(parentDiv?.className).toMatch(/Mui-error/);
       expect(inputField.value).toBe("");
     });
