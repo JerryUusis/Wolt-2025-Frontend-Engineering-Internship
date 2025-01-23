@@ -138,17 +138,29 @@ export const getDistancePrice = (
   basePrice: number
 ): number => {
   let distancePrice = 0;
+  if (
+    straightLineDistance < 0 ||
+    isNaN(straightLineDistance) ||
+    !Number.isInteger(straightLineDistance)
+  ) {
+    throw new Error("Straight line distance must be positive integer or 0");
+  }
   for (const distanceRangeObject of distanceRangesArray) {
     const { min, max, a, b } = distanceRangeObject;
 
-    if (
+    if (straightLineDistance >= min && max === 0) {
+      throw new Error(
+        `Distance price unavailable: Straight line distance: ${straightLineDistance} can't be greater than max: ${min}` // when max === 0, min is maximum distance
+      );
+    } else if (
       (straightLineDistance >= min && straightLineDistance < max) ||
-      (max === 0 && straightLineDistance < min)
+      (straightLineDistance < min && max === 0)
     ) {
       distancePrice = basePrice + a + (b * straightLineDistance) / 10;
+      break;
     }
   }
-  return distancePrice;
+  return Math.round(distancePrice);
 };
 
 export const getTotal = async (
