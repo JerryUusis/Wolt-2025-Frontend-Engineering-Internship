@@ -103,7 +103,7 @@ describe("getDistancePrice()", () => {
           testData[2]
         );
       });
-      describe("4nd object", () => {
+      describe("4th object", () => {
         testRangesFromDistanceObject(
           [1500, 1501, 1600, 1700, 1800, 1900, 1999],
           testData[3]
