@@ -25,13 +25,17 @@ function App() {
 
   const handleCalculateTotal = async (event: React.FormEvent) => {
     event.preventDefault();
-    const result = (await getTotal({
-      venueSlug,
-      cartValue,
-      userLatitude,
-      userLongitude,
-    })) as OutputObject;
-    setTotal(result);
+    try {
+      const result = (await getTotal({
+        venueSlug,
+        cartValue,
+        userLatitude,
+        userLongitude,
+      })) as OutputObject;
+      setTotal(result);
+    } catch (error) {
+      console.error(error)
+    }
   };
 
   return (
