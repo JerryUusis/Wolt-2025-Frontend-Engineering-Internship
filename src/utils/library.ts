@@ -155,7 +155,7 @@ export const getDistancePrice = (
 
     if (straightLineDistance >= min && max === 0) {
       throw new Error(
-        `Distance price unavailable: Straight line distance: ${straightLineDistance} can't be greater than max: ${min}` // when max === 0, min is maximum distance
+        `Distance price unavailable: Straight line distance: ${straightLineDistance}m can't be greater than max: ${min}m` // when max === 0, min is maximum distance
       );
     } else if (
       (straightLineDistance >= min && straightLineDistance < max) ||
