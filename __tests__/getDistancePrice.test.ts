@@ -46,14 +46,14 @@ describe("getDistancePrice()", () => {
     describe("more or equal to min when 'max=0' value in the last object", () => {
       let straightLineDistance = testData[lastIndex].min;
       test("equal to min", () => {
-        const errorMessage = `Distance price unavailable: Straight line distance: ${straightLineDistance} can't be greater than max: ${testData[lastIndex].min}`;
+        const errorMessage = `Distance price unavailable: Straight line distance: ${straightLineDistance}m can't be greater than venue max: ${testData[lastIndex].min}m`;
         expect(() =>
           getDistancePrice(straightLineDistance, testData, basePrice)
         ).toThrowError(errorMessage);
       });
       test("more than min", () => {
         straightLineDistance += 1;
-        const errorMessage = `Distance price unavailable: Straight line distance: ${straightLineDistance} can't be greater than max: ${testData[lastIndex].min}`;
+        const errorMessage = `Distance price unavailable: Straight line distance: ${straightLineDistance}m can't be greater than venue max: ${testData[lastIndex].min}m`;
         expect(() =>
           getDistancePrice(straightLineDistance, testData, basePrice)
         ).toThrowError(errorMessage);
