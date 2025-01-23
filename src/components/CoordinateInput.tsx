@@ -1,5 +1,5 @@
 import TextField from "@mui/material/TextField";
-import React, { Dispatch, useState } from "react";
+import React, { Dispatch, useState, useEffect } from "react";
 import { parseStepsFromDecimals } from "../utils/library";
 
 interface CoordinateInputProps {
@@ -20,16 +20,24 @@ const CoordinateInput = ({
 }: CoordinateInputProps) => {
   const [inputValue, setInputValue] = useState<string>(value.toString());
 
+  // Monitor for state changes if user clicks "Get location" button
+  useEffect(() => {
+    setInputValue(value.toString());
+  }, [value]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputString = event.target.value;
     setInputValue(inputString);
 
     if (inputString === "") {
-      return setNumberState(0);
+      setNumberState(0);
+      return;
     }
 
     const inputValueAsNumber = Number(inputString);
-    setNumberState(inputValueAsNumber);
+    if (!isNaN(inputValueAsNumber)) {
+      setNumberState(inputValueAsNumber);
+    }
   };
 
   const numberInputTypeProps = {
@@ -51,8 +59,8 @@ const CoordinateInput = ({
         }}
         type="number"
         onChange={handleChange}
-        error={inputValue === "" ? true : false}
-        value={inputValue === "" ? "" : value}
+        error={inputValue === ""}
+        value={inputValue}
       />
     </>
   );

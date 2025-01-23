@@ -2,7 +2,7 @@ import { formatRawValue } from "../utils/library";
 import { FormatType } from "../utils/types";
 import ListItem from "@mui/material/ListItem";
 
-interface SummaryListItemProps {
+export interface SummaryListItemProps {
   description: string;
   rawValue: number;
   formatType: FormatType;

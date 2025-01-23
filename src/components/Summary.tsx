@@ -4,7 +4,7 @@ import SummaryListItem from "./SummaryListItem";
 import Divider from "@mui/material/Divider";
 
 const Summary = ({
-  cartValueInCents,
+  cartValue,
   smallOrderSurcharge,
   deliveryDistance,
   deliveryFee,
@@ -12,8 +12,16 @@ const Summary = ({
 }: OutputObject) => {
   return (
     <List>
-      <SummaryListItem description="Cart value" rawValue={cartValueInCents} formatType="euro"/>
-      <SummaryListItem description="Delivery fee" rawValue={deliveryFee} formatType="euro"/>
+      <SummaryListItem
+        description="Cart value"
+        rawValue={cartValue}
+        formatType="euro"
+      />
+      <SummaryListItem
+        description="Delivery fee"
+        rawValue={deliveryFee}
+        formatType="euro"
+      />
       <SummaryListItem
         description="Delivery distance"
         rawValue={deliveryDistance}
@@ -24,10 +32,17 @@ const Summary = ({
         rawValue={smallOrderSurcharge}
         formatType="euro"
       />
-      <SummaryListItem description="Cart value" rawValue={cartValueInCents} formatType="euro"/>
-      <SummaryListItem description="Cart value" rawValue={cartValueInCents} formatType="euro"/>
+      <SummaryListItem
+        description="Cart value"
+        rawValue={cartValue}
+        formatType="euro"
+      />
       <Divider />
-      <SummaryListItem description="Total price" rawValue={totalPrice} formatType="euro"/>
+      <SummaryListItem
+        description="Total price"
+        rawValue={totalPrice}
+        formatType="euro"
+      />
     </List>
   );
 };

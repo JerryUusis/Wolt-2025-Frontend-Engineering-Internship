@@ -8,12 +8,19 @@ export interface DistanceRangeObject {
   flag: null;
 }
 
+export interface TotalInputObject {
+  venueSlug: string;
+  cartValue: number;
+  userLatitude: number;
+  userLongitude: number;
+}
+
 export interface OutputObject {
-  cartValueInCents: number;
+  cartValue: number;
   smallOrderSurcharge;
   deliveryDistance: number;
   deliveryFee: number;
   totalPrice: number;
 }
 
-export type FormatType = "euro" | "meter"
+export type FormatType = "euro" | "meter";

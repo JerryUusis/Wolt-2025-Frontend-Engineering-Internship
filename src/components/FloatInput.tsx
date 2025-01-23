@@ -1,5 +1,5 @@
 import TextField from "@mui/material/TextField";
-import React, { Dispatch, useState } from "react";
+import React, { Dispatch, useState, useEffect } from "react";
 import { parseStepsFromDecimals } from "../utils/library";
 
 interface FloatInputProps {
@@ -19,13 +19,24 @@ const FloatInput = ({
   value,
 }: FloatInputProps) => {
   const [inputValue, setInputValue] = useState<string>(value.toString());
+  const [error, setError] = useState(false);
+
+  // Monitor input value to determine if there's an error
+  useEffect(() => {
+    if (inputValue === "") {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }, [inputValue]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputString = event.target.value;
     setInputValue(inputString);
 
     if (inputString === "") {
-      return setNumberState(0);
+      setNumberState(0);
+      return;
     }
 
     const inputValueAsNumber = handleFloatInput(inputString, decimals);
@@ -55,7 +66,7 @@ const FloatInput = ({
         }}
         type="number"
         onChange={handleChange}
-        error={inputValue === "" ? true : false}
+        error={error}
         value={inputValue}
       />
     </>
