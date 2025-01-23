@@ -122,9 +122,14 @@ export const fetchVenueData = async (
   venueSlug: string,
   endpointType: "static" | "dynamic"
 ) => {
-  const url = `https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/${venueSlug}`;
-  const response = await fetch(`${url}/${endpointType}`);
-  return await response.json();
+  try {
+    const url = `https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/${venueSlug}`;
+    const response = await fetch(`${url}/${endpointType}`);
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 export const getDistancePrice = (
