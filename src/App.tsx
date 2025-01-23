@@ -91,9 +91,10 @@ function App() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          width: "80%",
+          width: "90%",
           alignItems: "center",
           gap: "1rem",
+          maxWidth: "500px",
         }}
       >
         <Typography variant="h1">Delivery Order Price Calculator</Typography>
@@ -123,7 +124,7 @@ function App() {
         />
         <Button onClick={handleGetLocation}>Get location</Button>
         <Button type="submit">Calculate delivery fee</Button>
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "90%" }}>
           <Typography variant="h2">Price Breakdown</Typography>
           <Summary {...total} />
         </Box>
