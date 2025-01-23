@@ -9,12 +9,15 @@ import FloatInput from "./components/FloatInput";
 import CoordinateInput from "./components/CoordinateInput";
 import StringInput from "./components/StringInput";
 import Summary from "./components/Summary";
+import AlertMessage from "./components/AlertMessage";
 
 function App() {
   const [venueSlug, setVenueSlug] = useState("home-assignment-venue-helsinki");
   const [cartValue, setCartValue] = useState(0); // Cart value in cents
   const [userLatitude, setUserLatitude] = useState(0);
   const [userLongitude, setUserLongitude] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [total, setTotal] = useState<OutputObject>({
     cartValue: 0,
     smallOrderSurcharge: 0,
@@ -22,6 +25,10 @@ function App() {
     deliveryFee: 0,
     totalPrice: 0,
   });
+
+  const handleCloseAlert = () => {
+    setIsAlertVisible(false);
+  };
 
   const handleCalculateTotal = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -34,7 +41,31 @@ function App() {
       })) as OutputObject;
       setTotal(result);
     } catch (error) {
-      console.error(error)
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+        setIsAlertVisible(true);
+      }
+      setTotal({
+        cartValue: 0,
+        smallOrderSurcharge: 0,
+        deliveryDistance: 0,
+        deliveryFee: 0,
+        totalPrice: 0,
+      });
+    }
+  };
+
+  const handleGetLocation = () => {
+    try {
+      getUserLocation(setUserLatitude, setUserLongitude, (error) => {
+        setErrorMessage(error.message);
+        setIsAlertVisible(true);
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+        setIsAlertVisible(true);
+      }
     }
   };
 
@@ -51,6 +82,11 @@ function App() {
       component={"form"}
       onSubmit={handleCalculateTotal}
     >
+      <AlertMessage
+        isVisible={isAlertVisible}
+        message={errorMessage}
+        onClose={handleCloseAlert}
+      />
       <Box
         sx={{
           display: "flex",
@@ -85,11 +121,7 @@ function App() {
           setNumberState={setUserLongitude}
           value={userLongitude}
         />
-        <Button
-          onClick={() => getUserLocation(setUserLatitude, setUserLongitude)}
-        >
-          Get location
-        </Button>
+        <Button onClick={handleGetLocation}>Get location</Button>
         <Button type="submit">Calculate delivery fee</Button>
         <Box sx={{ width: "100%" }}>
           <Typography variant="h2">Price Breakdown</Typography>

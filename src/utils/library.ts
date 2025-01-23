@@ -1,5 +1,10 @@
 import React, { SetStateAction } from "react";
-import { DistanceRangeObject, FormatType, OutputObject, TotalInputObject } from "./types";
+import {
+  DistanceRangeObject,
+  FormatType,
+  OutputObject,
+  TotalInputObject,
+} from "./types";
 
 export const getUserLocation = (
   setUserLatitude: React.Dispatch<SetStateAction<number>>,
@@ -33,6 +38,7 @@ export const getUserLocation = (
         onError(error);
       } else {
         console.error("Geolocation error:", error);
+        throw error;
       }
     }
   );
@@ -127,7 +133,7 @@ export const fetchVenueData = async (
     const response = await fetch(`${url}/${endpointType}`);
     return await response.json();
   } catch (error) {
-    throw new Error(`Failed to fetch ${endpointType} venue data`)
+    throw new Error(`Failed to fetch ${endpointType} venue data`);
   }
 };
 
@@ -166,16 +172,17 @@ export const getTotal = async (
   inputObject: TotalInputObject
 ): Promise<OutputObject | undefined> => {
   try {
-    const {venueSlug, cartValue, userLatitude,userLongitude} = inputObject
+    const { venueSlug, cartValue, userLatitude, userLongitude } = inputObject;
     const staticVenueData = await fetchVenueData(venueSlug, "static");
     const dynamicVenueData = await fetchVenueData(venueSlug, "dynamic");
-    
+
     const [venueLongitude, venueLatitude] =
-    staticVenueData.venue_raw.location.coordinates;
-    
+      staticVenueData.venue_raw.location.coordinates;
+
     const distanceRanges =
-    dynamicVenueData.venue_raw.delivery_specs.delivery_pricing.distance_ranges;
-    
+      dynamicVenueData.venue_raw.delivery_specs.delivery_pricing
+        .distance_ranges;
+
     // Calculate straight line distance between user and venue
     const deliveryDistance = haversineDistance(
       userLatitude,
@@ -183,24 +190,21 @@ export const getTotal = async (
       userLongitude,
       venueLongitude
     );
-    
+
     const noSurchargeThreshold =
-    dynamicVenueData.venue_raw.delivery_specs.order_minimum_no_surcharge;
-    
-    const smallOrderSurcharge = getSurcharge(
-      cartValue,
-      noSurchargeThreshold
-    );
-    
+      dynamicVenueData.venue_raw.delivery_specs.order_minimum_no_surcharge;
+
+    const smallOrderSurcharge = getSurcharge(cartValue, noSurchargeThreshold);
+
     const basePrice =
-    dynamicVenueData.venue_raw.delivery_specs.delivery_pricing.base_price;
-    
+      dynamicVenueData.venue_raw.delivery_specs.delivery_pricing.base_price;
+
     const deliveryFee = getDistancePrice(
       deliveryDistance,
       distanceRanges,
       basePrice
     );
-    
+
     const total = {
       cartValue,
       smallOrderSurcharge,
@@ -209,12 +213,10 @@ export const getTotal = async (
       totalPrice: cartValue + smallOrderSurcharge + deliveryFee,
     };
     return total;
+  } catch (error) {
+    throw error;
   }
-  catch(error) {
-    console.error(error)
-  }
-} 
-
+};
 
 // Format the raw data in SummaryListItem.tsx
 export const formatRawValue = (
