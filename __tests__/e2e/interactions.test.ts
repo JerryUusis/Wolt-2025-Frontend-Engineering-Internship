@@ -68,7 +68,7 @@ describe("user interaction", () => {
       });
     });
 
-    describe("Coordinates input", () => {
+    describe("Coordinate inputs", () => {
       let latitudeInput: Locator;
       const latitudeTestId: InputDataTestId = "userLatitude";
       let longitudeInput: Locator;
@@ -89,15 +89,46 @@ describe("user interaction", () => {
           expect(latitudeInput).toHaveValue("1.23");
         });
         test("should have error class if input is empty", async () => {
-            await latitudeInput.clear();
-            const textFieldRoot = latitudeInput.locator("..");
-            await expect(textFieldRoot).toHaveClass(/Mui-error/);
-          });
-          test("should have error class if input value is negative number", async () => {
-            await testHelper.fillInput(latitudeTestId, "-123");
-            const textFieldRoot = latitudeInput.locator("..");
-            await expect(textFieldRoot).toHaveClass(/Mui-error/);
-          });
+          await latitudeInput.clear();
+          const textFieldRoot = latitudeInput.locator("..");
+          await expect(textFieldRoot).toHaveClass(/Mui-error/);
+        });
+        test("should have error class if input value is greater than 90", async () => {
+          await testHelper.fillInput(latitudeTestId, "91");
+          const textFieldRoot = latitudeInput.locator("..");
+          await expect(textFieldRoot).toHaveClass(/Mui-error/);
+        });
+        test("should have error class if input value is lower than -90", async () => {
+          await testHelper.fillInput(latitudeTestId, "-91");
+          const textFieldRoot = latitudeInput.locator("..");
+          await expect(textFieldRoot).toHaveClass(/Mui-error/);
+        });
+      });
+
+      describe("longitude input", () => {
+        test("should accept integer value", async () => {
+          await testHelper.fillInput(longitudeTestId, "123");
+          expect(longitudeInput).toHaveValue("123");
+        });
+        test("should accept float value", async () => {
+          await testHelper.fillInput(longitudeTestId, "1.23");
+          expect(longitudeInput).toHaveValue("1.23");
+        });
+        test("should have error class if input is empty", async () => {
+          await longitudeInput.clear();
+          const textFieldRoot = longitudeInput.locator("..");
+          await expect(textFieldRoot).toHaveClass(/Mui-error/);
+        });
+        test("should have error class if input value is greater than 180", async () => {
+          await testHelper.fillInput(longitudeTestId, "181");
+          const textFieldRoot = longitudeInput.locator("..");
+          await expect(textFieldRoot).toHaveClass(/Mui-error/);
+        });
+        test("should have error class if input value is lower than -180", async () => {
+          await testHelper.fillInput(longitudeTestId, "-181");
+          const textFieldRoot = longitudeInput.locator("..");
+          await expect(textFieldRoot).toHaveClass(/Mui-error/);
+        });
       });
     });
   });
