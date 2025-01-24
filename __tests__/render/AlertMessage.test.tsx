@@ -37,14 +37,11 @@ describe("<AlertMessage />", () => {
 
   describe("interaction", () => {
     test("should call onClose after click", async () => {
-      alertMessage = screen.getByTestId("alertMessage");
       expect(alertMessage).toBeVisible();
       expect(alertMessage).toHaveTextContent("test message");
 
       const closeButton = screen.getByRole("button");
       await userEvent.click(closeButton);
-
-      // Check that the alert is not visible anymore
       expect(mockOnClose).toHaveBeenCalledOnce();
     });
   });
