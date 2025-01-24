@@ -32,11 +32,6 @@ const Summary = ({
         rawValue={smallOrderSurcharge}
         formatType="euro"
       />
-      <SummaryListItem
-        description="Cart value"
-        rawValue={cartValue}
-        formatType="euro"
-      />
       <Divider />
       <SummaryListItem
         description="Total price"
