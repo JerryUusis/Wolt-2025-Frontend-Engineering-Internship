@@ -30,7 +30,5 @@ export type InputDataTestId =
   | "cartValue"
   | "userLatitude"
   | "userLongitude"
-  | "getLocation"
-  | "calculateDeliveryPrice";
 
 export type CoordinateType = "latitude" | "longitude";

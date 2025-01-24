@@ -5,6 +5,15 @@ const { describe, beforeEach } = test;
 
 describe("user interaction", () => {
   let testHelper: TestHelper;
+  let venueSlugInput: Locator;
+  const venueSlugTestId: InputDataTestId = "venueSlug";
+  let cartValueInput: Locator;
+  const cartValueTestId: InputDataTestId = "cartValue";
+  let latitudeInput: Locator;
+  const latitudeTestId: InputDataTestId = "userLatitude";
+  let longitudeInput: Locator;
+  const longitudeTestId: InputDataTestId = "userLongitude";
+  
   beforeEach(async ({ page }) => {
     await page.goto("/");
     testHelper = new TestHelper(page);
@@ -12,9 +21,6 @@ describe("user interaction", () => {
 
   describe("inputs", () => {
     describe("Venue slug", () => {
-      const venueSlugTestId: InputDataTestId = "venueSlug";
-      let venueSlugInput: Locator;
-
       beforeEach(() => {
         venueSlugInput = testHelper.getInput(venueSlugTestId);
       });
@@ -40,10 +46,8 @@ describe("user interaction", () => {
         await expect(textFieldRoot).toHaveClass(/Mui-error/);
       });
     });
-    describe("Cart value", () => {
-      let cartValueInput: Locator;
-      const cartValueTestId: InputDataTestId = "cartValue";
 
+    describe("Cart value", () => {
       beforeEach(() => {
         cartValueInput = testHelper.getInput(cartValueTestId);
       });
@@ -69,11 +73,6 @@ describe("user interaction", () => {
     });
 
     describe("Coordinate inputs", () => {
-      let latitudeInput: Locator;
-      const latitudeTestId: InputDataTestId = "userLatitude";
-      let longitudeInput: Locator;
-      const longitudeTestId: InputDataTestId = "userLongitude";
-
       beforeEach(async () => {
         latitudeInput = testHelper.getInput(latitudeTestId);
         longitudeInput = testHelper.getInput(longitudeTestId);
