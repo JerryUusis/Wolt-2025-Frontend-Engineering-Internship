@@ -61,5 +61,10 @@ describe("user interaction", () => {
       const textFieldRoot = cartValueInput.locator("..");
       await expect(textFieldRoot).toHaveClass(/Mui-error/);
     });
+    test("should have error class if input value is negative number", async () => {
+      await testHelper.fillInput(cartValueTestId,"-123")
+      const textFieldRoot = cartValueInput.locator("..");
+      await expect(textFieldRoot).toHaveClass(/Mui-error/);
+    });
   });
 });

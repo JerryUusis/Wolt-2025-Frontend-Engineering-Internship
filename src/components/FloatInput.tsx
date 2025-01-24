@@ -23,7 +23,7 @@ const FloatInput = ({
 
   // Monitor input value to determine if there's an error
   useEffect(() => {
-    if (inputValue === "") {
+    if (inputValue === "" || value < 0) {
       setError(true);
     } else {
       setError(false);
