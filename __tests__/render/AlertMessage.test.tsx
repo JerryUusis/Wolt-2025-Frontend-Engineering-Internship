@@ -1,4 +1,4 @@
-import { screen, render } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { renderWithTheme } from "./renderTestLibrary";
 import { setCustomQuery } from "./renderTestLibrary";
 import AlertMessage from "../../src/components/AlertMessage";
@@ -7,21 +7,17 @@ import userEvent from "@testing-library/user-event";
 
 describe("<AlertMessage />", () => {
   setCustomQuery("data-test-id");
-  let isVisible: boolean; // mimic the state
 
-  const mockOnClose = vi.fn(() => {
-    isVisible = false;
-  });
+  const mockOnClose = vi.fn();
 
   let alertMessage: HTMLElement;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    isVisible = true;
     mockOnClose.mockClear();
     renderWithTheme(
       <AlertMessage
-        isVisible={isVisible}
+        isVisible={true}
         message="test message"
         onClose={mockOnClose}
       />,
