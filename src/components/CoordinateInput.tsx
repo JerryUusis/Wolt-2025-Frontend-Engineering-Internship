@@ -3,7 +3,7 @@ import React, { Dispatch, useState, useEffect } from "react";
 import { parseStepsFromDecimals } from "../utils/library";
 import { CoordinateType } from "../utils/types";
 
-interface CoordinateInputProps {
+export interface CoordinateInputProps {
   dataTestId: string;
   label: string;
   setNumberState: Dispatch<React.SetStateAction<number>>;
