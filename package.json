@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "playwright":"playwright test"
+    "playwright": "playwright test"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
