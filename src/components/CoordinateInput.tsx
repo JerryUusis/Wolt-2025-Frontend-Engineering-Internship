@@ -54,18 +54,16 @@ const CoordinateInput = ({
     setInputValue(inputString);
 
     if (inputString === "") {
-      // If input value is empty return NaN to App and set Error
+      // If input is empty return NaN to App and set Error true
       setError(true);
       setNumberState(NaN);
       return;
-    } else {
-      setError(false);
     }
 
     const inputValueAsNumber = Number(inputString);
 
     const isValid = isValidCoordinateRange(inputValueAsNumber);
-    setError(!isValid);
+    setError(!isValid); // if input value is not within valid value set error true
     setNumberState(inputValueAsNumber);
   };
 
