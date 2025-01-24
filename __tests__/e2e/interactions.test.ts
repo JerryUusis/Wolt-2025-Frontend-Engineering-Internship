@@ -12,24 +12,25 @@ describe("user interaction", () => {
 
   describe("inputs", () => {
     describe("Venue slug", () => {
+      const venueSlugTestId: InputDataTestId = "venueSlug";
       let venueSlugInput: Locator;
 
       beforeEach(() => {
-        venueSlugInput = testHelper.getInput("venueSlug");
+        venueSlugInput = testHelper.getInput(venueSlugTestId);
       });
 
       test("accepts text", async () => {
-        await testHelper.fillInput("venueSlug", "test 123");
+        await testHelper.fillInput(venueSlugTestId, "test 123");
         await expect(venueSlugInput).toHaveValue("test 123");
       });
       test("input trims white space from start", async () => {
         const testValue = " test 123";
-        await testHelper.fillInput("venueSlug", testValue);
+        await testHelper.fillInput(venueSlugTestId, testValue);
         expect(venueSlugInput).toHaveValue(testValue.trim());
       });
       test("input trims white space from end", async () => {
         const testValue = "test 123 ";
-        await testHelper.fillInput("venueSlug", testValue);
+        await testHelper.fillInput(venueSlugTestId, testValue);
         expect(venueSlugInput).toHaveValue(testValue.trim());
       });
       test("should have error class if input is empty", async () => {
@@ -39,32 +40,65 @@ describe("user interaction", () => {
         await expect(textFieldRoot).toHaveClass(/Mui-error/);
       });
     });
-  });
-  describe("Cart value", () => {
-    let cartValueInput: Locator;
-    const cartValueTestId: Partial<InputDataTestId> = "cartValue";
+    describe("Cart value", () => {
+      let cartValueInput: Locator;
+      const cartValueTestId: InputDataTestId = "cartValue";
 
-    beforeEach(() => {
-      cartValueInput = testHelper.getInput(cartValueTestId);
+      beforeEach(() => {
+        cartValueInput = testHelper.getInput(cartValueTestId);
+      });
+
+      test("should accept integer value", async () => {
+        await testHelper.fillInput(cartValueTestId, "123");
+        expect(cartValueInput).toHaveValue("123");
+      });
+      test("should accept float value", async () => {
+        await testHelper.fillInput(cartValueTestId, "1.23");
+        expect(cartValueInput).toHaveValue("1.23");
+      });
+      test("should have error class if input is empty", async () => {
+        await cartValueInput.clear();
+        const textFieldRoot = cartValueInput.locator("..");
+        await expect(textFieldRoot).toHaveClass(/Mui-error/);
+      });
+      test("should have error class if input value is negative number", async () => {
+        await testHelper.fillInput(cartValueTestId, "-123");
+        const textFieldRoot = cartValueInput.locator("..");
+        await expect(textFieldRoot).toHaveClass(/Mui-error/);
+      });
     });
 
-    test("should accept integer value", async () => {
-      await testHelper.fillInput(cartValueTestId, "123");
-      expect(cartValueInput).toHaveValue("123");
-    });
-    test("should accept float value", async () => {
-      await testHelper.fillInput(cartValueTestId, "1.23");
-      expect(cartValueInput).toHaveValue("1.23");
-    });
-    test("should have error class if input is empty", async () => {
-      await cartValueInput.clear();
-      const textFieldRoot = cartValueInput.locator("..");
-      await expect(textFieldRoot).toHaveClass(/Mui-error/);
-    });
-    test("should have error class if input value is negative number", async () => {
-      await testHelper.fillInput(cartValueTestId,"-123")
-      const textFieldRoot = cartValueInput.locator("..");
-      await expect(textFieldRoot).toHaveClass(/Mui-error/);
+    describe("Coordinates input", () => {
+      let latitudeInput: Locator;
+      const latitudeTestId: InputDataTestId = "userLatitude";
+      let longitudeInput: Locator;
+      const longitudeTestId: InputDataTestId = "userLongitude";
+
+      beforeEach(async () => {
+        latitudeInput = testHelper.getInput(latitudeTestId);
+        longitudeInput = testHelper.getInput(longitudeTestId);
+      });
+
+      describe("latitude input", () => {
+        test("should accept integer value", async () => {
+          await testHelper.fillInput(latitudeTestId, "123");
+          expect(latitudeInput).toHaveValue("123");
+        });
+        test("should accept float value", async () => {
+          await testHelper.fillInput(latitudeTestId, "1.23");
+          expect(latitudeInput).toHaveValue("1.23");
+        });
+        test("should have error class if input is empty", async () => {
+            await latitudeInput.clear();
+            const textFieldRoot = latitudeInput.locator("..");
+            await expect(textFieldRoot).toHaveClass(/Mui-error/);
+          });
+          test("should have error class if input value is negative number", async () => {
+            await testHelper.fillInput(latitudeTestId, "-123");
+            const textFieldRoot = latitudeInput.locator("..");
+            await expect(textFieldRoot).toHaveClass(/Mui-error/);
+          });
+      });
     });
   });
 });

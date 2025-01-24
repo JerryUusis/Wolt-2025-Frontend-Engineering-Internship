@@ -55,21 +55,21 @@ const FloatInput = ({
   };
 
   return (
-    <>
-      <TextField
-        label={label}
-        // https://mui.com/material-ui/migration/migrating-from-deprecated-apis/#textfield
-        slotProps={{
-          htmlInput: {
-            ...numberTypeProps,
-          },
-        }}
-        type="number"
-        onChange={handleChange}
-        error={error}
-        value={inputValue}
-      />
-    </>
+    <TextField
+      sx={{width:"250px"}}
+      label={label}
+      // https://mui.com/material-ui/migration/migrating-from-deprecated-apis/#textfield
+      slotProps={{
+        htmlInput: {
+          ...numberTypeProps,
+        },
+      }}
+      type="number"
+      onChange={handleChange}
+      error={error}
+      helperText={error ? "Must be a valid number" : " "}
+      value={inputValue}
+    />
   );
 };
 

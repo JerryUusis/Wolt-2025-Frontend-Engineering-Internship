@@ -34,20 +34,20 @@ const StringInput = ({
   };
 
   return (
-    <>
-      <TextField
-        label={label}
-        slotProps={{
-          htmlInput: {
-            "data-test-id": dataTestId,
-            inputMode: "text",
-          },
-        }}
-        onChange={handleChange}
-        value={inputValue}
-        error={error}
-      />
-    </>
+    <TextField
+      sx={{ width: "250px" }}
+      label={label}
+      slotProps={{
+        htmlInput: {
+          "data-test-id": dataTestId,
+          inputMode: "text",
+        },
+      }}
+      onChange={handleChange}
+      value={inputValue}
+      error={error}
+      helperText={error ? "Please enter venue slug" : " "}
+    />
   );
 };
 

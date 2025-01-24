@@ -115,12 +115,14 @@ function App() {
           dataTestId={"userLatitude"}
           setNumberState={setUserLatitude}
           value={userLatitude}
+          coordinateType="latitude"
         />
         <CoordinateInput
           label="User longitude"
           dataTestId={"userLongitude"}
           setNumberState={setUserLongitude}
           value={userLongitude}
+          coordinateType="longitude"
         />
         <Button onClick={handleGetLocation} data-test-id="locationButton">
           Get location

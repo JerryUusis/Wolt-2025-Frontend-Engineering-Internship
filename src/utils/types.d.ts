@@ -32,3 +32,5 @@ export type InputDataTestId =
   | "userLongitude"
   | "getLocation"
   | "calculateDeliveryPrice";
+
+export type CoordinateType = "latitude" | "longitude";
