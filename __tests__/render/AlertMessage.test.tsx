@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { cleanup, screen } from "@testing-library/react";
 import { renderWithTheme } from "./renderTestLibrary";
 import { setCustomQuery } from "./renderTestLibrary";
 import AlertMessage from "../../src/components/AlertMessage";
@@ -32,6 +32,18 @@ describe("<AlertMessage />", () => {
     });
     test("should have the right message", async () => {
       expect(alertMessage).toHaveTextContent("test message");
+    });
+    test("should not render when isVisible is false", () => {
+      cleanup();
+      renderWithTheme(
+        <AlertMessage
+          isVisible={false}
+          message="test message"
+          onClose={mockOnClose}
+        />,
+        theme
+      );
+      expect(alertMessage).not.toBeVisible();
     });
   });
 
