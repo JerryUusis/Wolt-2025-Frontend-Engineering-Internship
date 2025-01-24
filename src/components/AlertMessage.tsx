@@ -16,6 +16,7 @@ const AlertMessage = ({ message, isVisible, onClose }: AlertMessageProps) => {
       autoHideDuration={6000}
       onClose={onClose}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      data-test-id="alertMessage"
     >
       <Alert
         variant="filled"
