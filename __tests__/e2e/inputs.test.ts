@@ -13,7 +13,7 @@ describe("user interaction", () => {
   const latitudeTestId: InputDataTestId = "userLatitude";
   let longitudeInput: Locator;
   const longitudeTestId: InputDataTestId = "userLongitude";
-  
+
   beforeEach(async ({ page }) => {
     await page.goto("/");
     testHelper = new TestHelper(page);
@@ -32,12 +32,12 @@ describe("user interaction", () => {
       test("input trims white space from start", async () => {
         const testValue = " test 123";
         await testHelper.fillInput(venueSlugTestId, testValue);
-        expect(venueSlugInput).toHaveValue(testValue.trim());
+        await expect(venueSlugInput).toHaveValue(testValue.trim());
       });
       test("input trims white space from end", async () => {
         const testValue = "test 123 ";
         await testHelper.fillInput(venueSlugTestId, testValue);
-        expect(venueSlugInput).toHaveValue(testValue.trim());
+        await expect(venueSlugInput).toHaveValue(testValue.trim());
       });
       test("should have error class if input is empty", async () => {
         await venueSlugInput.clear();
@@ -54,11 +54,11 @@ describe("user interaction", () => {
 
       test("should accept integer value", async () => {
         await testHelper.fillInput(cartValueTestId, "123");
-        expect(cartValueInput).toHaveValue("123");
+        await expect(cartValueInput).toHaveValue("123");
       });
       test("should accept float value", async () => {
         await testHelper.fillInput(cartValueTestId, "1.23");
-        expect(cartValueInput).toHaveValue("1.23");
+        await expect(cartValueInput).toHaveValue("1.23");
       });
       test("should have error class if input is empty", async () => {
         await cartValueInput.clear();
@@ -81,11 +81,11 @@ describe("user interaction", () => {
       describe("latitude input", () => {
         test("should accept integer value", async () => {
           await testHelper.fillInput(latitudeTestId, "123");
-          expect(latitudeInput).toHaveValue("123");
+          await expect(latitudeInput).toHaveValue("123");
         });
         test("should accept float value", async () => {
           await testHelper.fillInput(latitudeTestId, "1.23");
-          expect(latitudeInput).toHaveValue("1.23");
+          await expect(latitudeInput).toHaveValue("1.23");
         });
         test("should have error class if input is empty", async () => {
           await latitudeInput.clear();
@@ -107,11 +107,11 @@ describe("user interaction", () => {
       describe("longitude input", () => {
         test("should accept integer value", async () => {
           await testHelper.fillInput(longitudeTestId, "123");
-          expect(longitudeInput).toHaveValue("123");
+          await expect(longitudeInput).toHaveValue("123");
         });
         test("should accept float value", async () => {
           await testHelper.fillInput(longitudeTestId, "1.23");
-          expect(longitudeInput).toHaveValue("1.23");
+          await expect(longitudeInput).toHaveValue("1.23");
         });
         test("should have error class if input is empty", async () => {
           await longitudeInput.clear();

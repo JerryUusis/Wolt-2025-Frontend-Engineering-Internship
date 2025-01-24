@@ -35,6 +35,9 @@ const CoordinateInput = ({
 
   // Monitor for state changes if user clicks "Get location" button
   useEffect(() => {
+    if (isNaN(value)) {
+      return;
+    }
     setInputValue(value.toString());
     setError(!isValidCoordinateRange(value)); // If value is not within valid range, set error true
   }, [value]);
