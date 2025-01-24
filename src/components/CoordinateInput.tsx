@@ -23,8 +23,8 @@ const CoordinateInput = ({
 }: CoordinateInputProps) => {
   const [inputValue, setInputValue] = useState<string>(value.toString());
   const [error, setError] = useState(false);
-  const [min, setMin] = useState<number>();
-  const [max, setMax] = useState<number>();
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(0);
 
   // Set range dependig on the coordinate type
   useEffect(() => {
@@ -35,8 +35,8 @@ const CoordinateInput = ({
 
   // Monitor for state changes if user clicks "Get location" button
   useEffect(() => {
-    setInputValue(isNaN(value) ? "" : value.toString());
-    setError(isNaN(value));
+    setInputValue(value.toString());
+    setError(!isValidCoordinateRange(value)); // If value is not within valid range, set error true
   }, [value]);
 
   const setValueRange = (coordinateType: CoordinateType) => {
@@ -54,6 +54,7 @@ const CoordinateInput = ({
     setInputValue(inputString);
 
     if (inputString === "") {
+      // If input value is empty return NaN to App and set Error
       setError(true);
       setNumberState(NaN);
       return;
@@ -62,14 +63,10 @@ const CoordinateInput = ({
     }
 
     const inputValueAsNumber = Number(inputString);
-    if (!isValidCoordinateRange(inputValueAsNumber)) {
-      setError(true);
-    }
 
-    if (!isNaN(inputValueAsNumber)) {
-      setNumberState(inputValueAsNumber);
-      setError(false);
-    }
+    const isValid = isValidCoordinateRange(inputValueAsNumber);
+    setError(!isValid);
+    setNumberState(inputValueAsNumber);
   };
 
   const numberInputTypeProps = {
