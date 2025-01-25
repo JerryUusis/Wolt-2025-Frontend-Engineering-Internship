@@ -57,10 +57,10 @@ class TestHelper {
       const locationButton = this.page.getByRole("button", {
         name: "Get location",
       });
-      await locationButton.click()
+      await locationButton.click();
     }
 
-    await this.pressCalculateButton()
+    await this.pressCalculateButton();
   }
 }
 
