@@ -24,3 +24,11 @@ export interface OutputObject {
 }
 
 export type FormatType = "euro" | "meter";
+
+export type InputDataTestId =
+  | "venueSlug"
+  | "cartValue"
+  | "userLatitude"
+  | "userLongitude";
+
+export type CoordinateType = "latitude" | "longitude";

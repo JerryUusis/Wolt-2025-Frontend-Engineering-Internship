@@ -1,5 +1,5 @@
-import { getDistancePrice } from "../src/utils/library";
-import { DistanceRangeObject } from "../src/utils/types";
+import { getDistancePrice } from "../../src/utils/library";
+import { DistanceRangeObject } from "../../src/utils/types";
 
 describe("getDistancePrice()", () => {
   const testData: DistanceRangeObject[] = [

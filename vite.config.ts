@@ -9,5 +9,9 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./__tests__/testSetup.ts",
     globals: true,
+    exclude: ["./__tests__/e2e/**", "./node_modules"], // Exclude Playwright or E2E test files
+    coverage: {
+      exclude: ["./__tests__/e2e/**", "**.config.**", "**.d.ts"]
+    },
   },
 });

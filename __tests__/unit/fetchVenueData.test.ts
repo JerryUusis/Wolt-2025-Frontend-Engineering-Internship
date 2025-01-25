@@ -1,4 +1,4 @@
-import { fetchVenueData } from "../src/utils/library";
+import { fetchVenueData } from "../../src/utils/library";
 
 const mockFetch = vi.fn();
 
@@ -42,7 +42,7 @@ describe("fetchVenueData", () => {
   describe("failed api call", () => {
     testCases.forEach((dataType) => {
       test(`should throw error on rejection with datatype='${dataType}'`, async () => {
-        expect(async () => {
+        await expect(async () => {
           await fetchVenueData(testSlug, dataType);
         }).rejects.toThrowError(`Failed to fetch ${dataType} venue data`);
 

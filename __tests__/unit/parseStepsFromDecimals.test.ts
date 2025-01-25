@@ -1,4 +1,4 @@
-import { parseStepsFromDecimals } from "../src/utils/library";
+import { parseStepsFromDecimals } from "../../src/utils/library";
 
 describe("parseStepsFromDecimals()", () => {
   describe("should return right amount of decimals", () => {

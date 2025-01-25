@@ -115,15 +115,21 @@ function App() {
           dataTestId={"userLatitude"}
           setNumberState={setUserLatitude}
           value={userLatitude}
+          coordinateType="latitude"
         />
         <CoordinateInput
           label="User longitude"
           dataTestId={"userLongitude"}
           setNumberState={setUserLongitude}
           value={userLongitude}
+          coordinateType="longitude"
         />
-        <Button onClick={handleGetLocation}>Get location</Button>
-        <Button type="submit">Calculate delivery fee</Button>
+        <Button onClick={handleGetLocation} data-test-id="locationButton">
+          Get location
+        </Button>
+        <Button type="submit" data-test-id="calculateDeliveryFeeButton">
+          Calculate delivery fee
+        </Button>
         <Box sx={{ width: "90%" }}>
           <Typography variant="h2">Price Breakdown</Typography>
           <Summary {...total} />

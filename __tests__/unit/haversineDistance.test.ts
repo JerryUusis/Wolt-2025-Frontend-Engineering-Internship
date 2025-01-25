@@ -1,4 +1,4 @@
-import { haversineDistance } from "../src/utils/library";
+import { haversineDistance } from "../../src/utils/library";
 import { testCoordinateValuesArray } from "./testUtils";
 
 describe("haversineDistance", () => {
