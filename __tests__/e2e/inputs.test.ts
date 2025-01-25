@@ -78,6 +78,48 @@ describe("user interaction", () => {
         longitudeInput = testHelper.getInput(longitudeTestId);
       });
 
+      describe("use 'Get location' button to get values", () => {
+        test("clicking 'Get location' fills inputs with current coordinates", async ({
+          page,
+        }) => {
+          const locationButton = page.getByRole("button", {
+            name: "Get location",
+          });
+          await locationButton.click();
+
+          await expect(latitudeInput).toHaveValue("60.17094");
+          await expect(longitudeInput).toHaveValue("24.93087");
+        });
+        test("user doesn't grant permission", async ({ page, context }) => {
+          await context.clearPermissions(); // Clear permissions set in the config file for this test
+          // Omit success callback and mock the geolocation position error
+          // https://playwright.dev/docs/api/class-page#page-evaluate
+          await page.evaluate(() => {
+            navigator.geolocation.getCurrentPosition = (_, reject) => {
+              if (reject) {
+                reject({
+                  code: 1,
+                  message: "User denied Geolocation",
+                  PERMISSION_DENIED: 1,
+                  POSITION_UNAVAILABLE: 2,
+                  TIMEOUT: 3,
+                });
+              }
+            };
+          });
+
+          const locationButton = page.getByRole("button", {
+            name: "Get location",
+          });
+          await locationButton.click();
+
+          const alertMessage = testHelper.getElementWithTestId("alertMessage");
+          await alertMessage.waitFor({ state: "visible" });
+          await expect(alertMessage).toBeVisible();
+          await expect(alertMessage).toHaveText("User denied Geolocation");
+        });
+      });
+
       describe("latitude input", () => {
         test("should accept integer value", async () => {
           await testHelper.fillInput(latitudeTestId, "123");

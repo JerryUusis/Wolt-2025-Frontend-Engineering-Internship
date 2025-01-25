@@ -28,23 +28,42 @@ describe("Calculate delivery fee", () => {
         total.locator(".MuiListItemSecondaryAction-root span")
       ).toHaveAttribute("data-raw-value", "1190");
     });
+    test("use 'Get location' button and calculate total", async () => {
+     await testHelper.calculateTotal(cartValue)
+     const total = testHelper.getListItem("Total price");
+     await expect(total).toHaveText(/11,90/)
+    });
   });
 
   describe("errors", () => {
     test("cart value input is empty", async () => {
-      await testHelper.calculateTotal("", latitude, longitude);
+      await testHelper.fillInput("cartValue", "");
+      await testHelper.fillInput("userLatitude", latitude);
+      await testHelper.fillInput("userLongitude", longitude);
+
+      await testHelper.pressCalculateButton()
+      
       await errorMessage.waitFor({ state: "visible" });
       await expect(errorMessage).toBeVisible();
-     await expect(errorMessage).toHaveText("cart value is missing value");
+      await expect(errorMessage).toHaveText("cart value is missing value");
     });
     test("latitude input is empty", async () => {
-      await testHelper.calculateTotal(cartValue, "", longitude);
+      await testHelper.fillInput("cartValue", cartValue);
+      await testHelper.fillInput("userLatitude", "");
+      await testHelper.fillInput("userLongitude", longitude);
+
+      await testHelper.pressCalculateButton()
       await errorMessage.waitFor({ state: "visible" });
       await expect(errorMessage).toBeVisible();
       await expect(errorMessage).toHaveText("latitude must be a valid number");
     });
     test("longitude input is empty", async () => {
-      await testHelper.calculateTotal(cartValue, latitude, "");
+      await testHelper.fillInput("cartValue", cartValue);
+      await testHelper.fillInput("userLatitude", latitude);
+      await testHelper.fillInput("userLongitude", "");
+
+      await testHelper.pressCalculateButton()
+    
       await errorMessage.waitFor({ state: "visible" });
       await expect(errorMessage).toBeVisible();
       await expect(errorMessage).toHaveText("longitude must be a valid number");

@@ -55,8 +55,6 @@ describe("<StringInput />", () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
       await userEvent.clear(inputField);
 
-      console.log(inputField.value);
-
       expect(inputField.value).toBe("");
       expect(setMockState).toHaveBeenCalledOnce();
       expect(setMockState).toHaveBeenCalledWith("");
