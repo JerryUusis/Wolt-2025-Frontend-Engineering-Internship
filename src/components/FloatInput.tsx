@@ -1,5 +1,5 @@
 import TextField from "@mui/material/TextField";
-import React, { Dispatch, useState, useEffect } from "react";
+import React, { Dispatch, useState } from "react";
 import { parseStepsFromDecimals } from "../utils/library";
 
 interface FloatInputProps {
