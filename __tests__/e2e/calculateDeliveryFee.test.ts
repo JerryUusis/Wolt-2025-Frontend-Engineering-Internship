@@ -29,20 +29,34 @@ describe("Calculate delivery fee", () => {
       ).toHaveAttribute("data-raw-value", "1190");
     });
     test("use 'Get location' button and calculate total", async () => {
-     await testHelper.calculateTotal(cartValue)
-     const total = testHelper.getListItem("Total price");
-     await expect(total).toHaveText(/11,90/)
+      await testHelper.calculateTotal(cartValue);
+      const total = testHelper.getListItem("Total price");
+      await expect(total).toHaveText(/11,90/);
     });
   });
 
   describe("errors", () => {
+    test("venue is too far from user location", async ({ context }) => {
+      // From north pole to Wolt HQ Helsinki
+      context.setGeolocation({
+        latitude: 90,
+        longitude: 0,
+      });
+      await testHelper.calculateTotal("10");
+
+      await errorMessage.waitFor({ state: "visible" });
+      await expect(errorMessage).toBeVisible();
+      await expect(errorMessage).toHaveText(
+        /can't be greater than venue max: 2000m/
+      );
+    });
     test("cart value input is empty", async () => {
       await testHelper.fillInput("cartValue", "");
       await testHelper.fillInput("userLatitude", latitude);
       await testHelper.fillInput("userLongitude", longitude);
 
-      await testHelper.pressCalculateButton()
-      
+      await testHelper.pressCalculateButton();
+
       await errorMessage.waitFor({ state: "visible" });
       await expect(errorMessage).toBeVisible();
       await expect(errorMessage).toHaveText("cart value is missing value");
@@ -52,7 +66,7 @@ describe("Calculate delivery fee", () => {
       await testHelper.fillInput("userLatitude", "");
       await testHelper.fillInput("userLongitude", longitude);
 
-      await testHelper.pressCalculateButton()
+      await testHelper.pressCalculateButton();
       await errorMessage.waitFor({ state: "visible" });
       await expect(errorMessage).toBeVisible();
       await expect(errorMessage).toHaveText("latitude must be a valid number");
@@ -62,8 +76,8 @@ describe("Calculate delivery fee", () => {
       await testHelper.fillInput("userLatitude", latitude);
       await testHelper.fillInput("userLongitude", "");
 
-      await testHelper.pressCalculateButton()
-    
+      await testHelper.pressCalculateButton();
+
       await errorMessage.waitFor({ state: "visible" });
       await expect(errorMessage).toBeVisible();
       await expect(errorMessage).toHaveText("longitude must be a valid number");
