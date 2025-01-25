@@ -29,6 +29,6 @@ export type InputDataTestId =
   | "venueSlug"
   | "cartValue"
   | "userLatitude"
-  | "userLongitude"
+  | "userLongitude";
 
 export type CoordinateType = "latitude" | "longitude";

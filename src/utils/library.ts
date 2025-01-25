@@ -101,9 +101,9 @@ export const getSurcharge = (cartValueInCents: number, maxValue: number) => {
   if (maxValue < 0 || cartValueInCents < 0) {
     throw new Error("parameters can't have negative value");
   } else if (isNaN(cartValueInCents)) {
-    throw new Error("cart value is missing value")
+    throw new Error("cart value is missing value");
   }
-  
+
   if (cartValueInCents >= maxValue) {
     return 0;
   } else {
