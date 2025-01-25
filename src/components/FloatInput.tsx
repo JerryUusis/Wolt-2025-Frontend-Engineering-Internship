@@ -21,25 +21,22 @@ const FloatInput = ({
   const [inputValue, setInputValue] = useState<string>(value.toString());
   const [error, setError] = useState(false);
 
-  // Monitor input value to determine if there's an error
-  useEffect(() => {
-    if (inputValue === "" || value < 0) {
-      setError(true);
-    } else {
-      setError(false);
-    }
-  }, [inputValue]);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputString = event.target.value;
     setInputValue(inputString);
 
     if (inputString === "") {
-      setNumberState(0);
+      setNumberState(NaN);
+      setError(true);
       return;
     }
 
     const inputValueAsNumber = handleFloatInput(inputString, decimals);
+    if (inputValueAsNumber < 0) {
+      setError(true);
+    } else {
+      setError(false);
+    }
     setNumberState(inputValueAsNumber);
   };
 
@@ -56,7 +53,7 @@ const FloatInput = ({
 
   return (
     <TextField
-      sx={{width:"250px"}}
+      sx={{ width: "250px" }}
       label={label}
       // https://mui.com/material-ui/migration/migrating-from-deprecated-apis/#textfield
       slotProps={{

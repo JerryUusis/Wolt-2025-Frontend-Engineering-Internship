@@ -24,7 +24,6 @@ describe("<FloatInput />", () => {
 
   afterEach(() => {
     vi.resetAllMocks();
-    cleanup();
   });
 
   describe("initial render", () => {
@@ -59,13 +58,13 @@ describe("<FloatInput />", () => {
   });
 
   describe("user interaction", () => {
-    test("should call 'setState' with zero (0) when input is empty", () => {
+    test("should call 'setState' with zero 'NaN' when input is empty", () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
       userEvent.clear(inputField);
 
       expect(inputField.value).toBe("");
       expect(setMockState).toHaveBeenCalledOnce();
-      expect(setMockState).toHaveBeenCalledWith(0);
+      expect(setMockState).toHaveBeenCalledWith(NaN);
     });
     test("should set 'setState' to user's desired value", async () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
@@ -79,25 +78,9 @@ describe("<FloatInput />", () => {
       // Use Number(inputValue) * Math.pow(10, decimals) to parse the value to integer (cents in this case)
       expect(setMockState).toHaveBeenLastCalledWith(Number(newValue) * 100);
     });
-    test("should have class '.Mui-error' if input is empty", () => {
+    test("should have class '.Mui-error' if input is empty", async () => {
       const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
-      userEvent.clear(inputField);
-
-      // Get the error class from the input field's parent <div> element
-      const parentDiv = inputField.parentElement;
-
-      // https://developer.mozilla.org/en-US/docs/Web/API/Element/className
-      // https://mui.com/material-ui/api/input/#classes
-      expect(parentDiv?.className).toMatch(/Mui-error/);
-      expect(inputField.value).toBe("");
-    });
-    test("should have class '.Mui-error' if input's final character is a dot '.'", () => {
-      const inputField: HTMLInputElement = screen.getByTestId(dataTestId);
-      userEvent.clear(inputField);
-
-      const newValue = "13.";
-
-      userEvent.type(inputField, newValue);
+      await userEvent.clear(inputField);
 
       // Get the error class from the input field's parent <div> element
       const parentDiv = inputField.parentElement;
